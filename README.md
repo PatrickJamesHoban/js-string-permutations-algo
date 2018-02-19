@@ -7,7 +7,7 @@ Write a function that takes ...
 - a string
 
 And returns...
-- an array with all possible unique permutations of the string.
+- an array with all possible unique permutations of the string in an array.
 
 ### Note:
 - returned array should not include duplicates if duplicates are possible given the input string.
