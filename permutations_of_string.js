@@ -20,9 +20,62 @@
 
 // track positions each letter has been?
 
-// CODE
-// CODE
-function permutationsAbc(string) {
+
+
+// ********************************* PATTERN FOR 3 LETTERS *************************************
+
+// abc => flip 2, 3
+// acb => flip 1, 2
+// cab => flip 2, 3
+// cba => flip 1, 2
+// bca => flip 2, 3
+// bac => flip 1, 2 - Back at the Beginning.
+
+
+// ******************************* 4TH PATTERN ATTEMPT FOR 4 LETTERS - WORKS!!! ***************************************
+
+// SET DEFG AS THE BEGINNING FOR REFERENCE.  I KNOW I HAVE 4 DIFFERENT LETTERS THAT NEED TO MOVE TO THE FIRST POSITION SO I HAVE 4 DIFFERENT MOVE FIRST TO LAST THAT I NEED TO MAKE.
+
+// DEFG => 
+// DEGF => FLIP 3, 4
+// DGEF => FLIP 2, 3
+// DGFE => FLIP 3, 4
+// DFGE => FLIP 2, 3
+// DFEG => FLIP 3, 4
+
+      // DEFG => FLIP 2, 3 - BACK AT BEGINNING
+// GDEF => MOVE LAST TO FIRST
+// GDFE => FLIP 3, 4 - FLIP LAST POS.
+// GFDE => FLIP 2, 3 
+// GFED => FLIP 3, 4
+// GEFD => FLIP 2, 3
+// GEDF => FLIP 3, 4
+
+      // GDEF => FLIP 2, 3 - BACK AT BEGINNING
+// FGDE => FLIP 2, 3 - BACK AT BEGINNING, & MOVE LAST TO FIRST
+// FGED => FLIP 3, 4
+// FEGD => FLIP 2, 3
+// FEDG => FLIP 3, 4
+// FDEG => FLIP 2, 3
+// FDGE => FLIP 3, 4
+
+      // FGDE => FLIP 2, 3 - BACK AT BEGINNING
+// EFGD => FLIP 2, 3 - BACK AT BEGINNING, & MOVE LAST TO FIRST
+// EFDG => FLIP 3, 4
+// EDFG => FLIP 2, 3
+// EDGF => FLIP 3, 4
+// EGDF => FLIP 2, 3
+// EGFD => FLIP 3, 4
+
+      // EFGD => FLIP 2, 3 - BACK AT BEGINNING
+// DEFG => FLIP 2, 3 - BACK AT BEGINNING, & MOVE LAST TO FIRST, BACK AT TRUE BEGINNING
+
+// WORKING!!!!
+
+
+
+// ***********************************  CODE  *****************************************
+function permutations(string) {
   var arr = [];
   // arr.push("hi")
   arr.push(string);
@@ -32,24 +85,40 @@ function permutationsAbc(string) {
   // console.log(arr.slice(-1).pop().toString().slice(0));
   // console.log(arr)
   // flip last two
-  var i = 0;
-  do { 
+  var k = 3;
+  if ( string.length > 3 ) { 
+    k = 0;
+  }
+  // console.log(k); // 1 for 'defg'
+  
+  for (k; k < string.length; k++) {
+    // move last to first...
+    console.log("hi");
     // console.log(arr.slice(-1).pop());
-    var one = flipLastTwo(arr.slice(-1).pop());
-    console.log(one);
-    arr.push(one);
-    var two = flipBeforeLastTwo(one);
-    console.log('hi')
-    console.log(two);
-    arr.push(two);
-    i++; 
-  } while (i < 3);
+    // console.log(arr.pop());
+    
+    // this doesn't manipulate the array, but does create duplicate entries.
+    // arr.push(moveLastFirst(arr.slice(-1).pop()));
+    // using only .pop() manipulates the array, but in a way that we want, removing duplicates.
+    arr.push(moveLastFirst(arr.pop()));
+    
+    var i = 0;
+    do { 
+      // console.log(arr.slice(-1).pop());
+      var one = flipLastTwo(arr.slice(-1).pop());
+      // console.log(one);
+      arr.push(one);
+      var two = flipBeforeLastTwo(one);
+      // console.log('hi')
+      // console.log(two);
+      arr.push(two);
+      i++; 
+    } while (i < 3);
+  }
   
   // remove the duplicate abc
   // arr.pop();
-  // console.log(arr);
-  
-  // filter function iterates over the array and removes duplicates.
+  console.log(arr);
   uniq_arr = arr.filter(function(letter, idx, self) {
     return idx == self.indexOf(letter);
   })
@@ -58,28 +127,38 @@ function permutationsAbc(string) {
 }
 
 // PH - WORKING!
+// Move last letter to first position.
+function moveLastFirst(string) {
+  // console.log(string);
+  var str_minus_last = string.slice(0, -1);
+  // console.log(str_minus_last);
+  var last_letter = string.charAt(string.length-1);
+  // console.log(last_letter);
+  return (last_letter + str_minus_last);
+}
+
+// PH - WORKING!
 function flipLastTwo(string) {
-  var strMissingTwo = string.slice(0, -2);
-  console.log(strMissingTwo);
-  console.log(string)
+  var str_missing_two = string.slice(0, -2);
+  // console.log(str_missing_two);
+  // console.log(string)
   var last = string.charAt(string.length-1);
-  console.log(last);
-  var secondToLast = string.charAt(string.length-2);
-  return (strMissingTwo + last + secondToLast);
+  // console.log(last);
+  var second_to_last = string.charAt(string.length-2);
+  return (str_missing_two + last + second_to_last);
 }
 
 // PH - WORKING!
 function flipBeforeLastTwo(string) {
   var first = string.slice(0, -3);
-  console.log(first);
-  var firstMid = string.charAt(string.length-3);
-  console.log(firstMid);
-  var secondMid = string.charAt(string.length-2);
-  console.log(secondMid);
+  // console.log(first);
+  var first_middle = string.charAt(string.length-3);
+  // console.log(first_middle);
+  var second_middle = string.charAt(string.length-2);
+  // console.log(second_middle);
   var last = string.slice(-1);
-  console.log(last);
-  
-  return (first + secondMid + firstMid + last);
+  // console.log(last);
+  return (first + second_middle + first_middle + last);
 }
 
 function permutationsFive(string) {
@@ -113,15 +192,28 @@ function permutationsFive(string) {
   }
 }
 
+
 // DRIVER CODE
 
 // console.log(flipLastTwo('abc'));  // WORKING!
 
-console.log(flipBeforeLastTwo('abc')); // WORKING!
+// console.log(flipBeforeLastTwo('abc')); // WORKING!
 
-// permutationsAbc('abc');
+// permutations('abc'); // WORKING!
 
-// permutationsFive('abcde')
+// permutations('a'); // WORKING!
+
+// permutations('ab'); // WORKING!!
+
+// permutations('aa'); // WORKING!!
+
+// permutations('defg'); // WORKING!!
+
+// permutations('aabb'); // WORKING!!
+
+permutations('abcde'); // 
+
+// permutations('abacd'); //
 
 // permutations('p'); // ['p']
 
@@ -131,6 +223,8 @@ console.log(flipBeforeLastTwo('abc')); // WORKING!
 
 
 
+
+// PSEUDO CODE 
 
   // Set j as string.length - i factorial. This would be the permutations needed to move to the next step. j = 1.
 
@@ -297,7 +391,9 @@ console.log(flipBeforeLastTwo('abc')); // WORKING!
 
 // ******************************* 4TH PATTERN ATTEMPT FOR 4 LETTERS - WORKS!!! ***************************************
 
-// DEFG => 
+// SET DEFG AS THE BEGINNING FOR REFERENCE.  I KNOW I HAVE 4 DIFFERENT LETTERS THAT NEED TO MOVE TO THE FIRST POSITION SO I HAVE 4 DIFFERENT MOVE FIRST TO LAST THAT I NEED TO MAKE.
+
+// DEFG => MOVE FIRST TO LAST
 
 // GDEF => MOVE LAST TO FIRST
 // GDFE => FLIP 3, 4 - FLIP LAST POS.
@@ -323,8 +419,14 @@ console.log(flipBeforeLastTwo('abc')); // WORKING!
 // EGFD => FLIP 3, 4
 
       // EFGD => FLIP 2, 3 - BACK AT BEGINNING
-// DEFG => FLIP 2, 3 - BACK AT BEGINNING, BACK AT TRUE BEGINNING
+// DEFG => FLIP 2, 3 - BACK AT BEGINNING, & MOVE LAST TO FIRST
+// DEGF => FLIP 3, 4
+// DGEF => FLIP 2, 3
+// DGFE => FLIP 3, 4
+// DFGE => FLIP 2, 3
+// DFEG => FLIP 3, 4
 
+      // DEFG => FLIP 2, 3 - BACK AT BEGINNING, BACK AT ORIGINAL STRING / TRUE BEGINNING!!
 // WORKING!!!!
 
 // ****************************** 5 LETTER PATTERN 1ST ATTEMPT, USE WORKING 4 LETTER PATTERN *************************
