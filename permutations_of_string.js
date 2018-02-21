@@ -1,4 +1,14 @@
 // PSEUDO CODE
+
+// Priorities:  
+  // Get a one letter string working
+  // Get a two letter string working.
+  // Get a two letter string w/ duplicates working
+  // Make sure 3 letter string still works.
+  // Get a four letter string to work.
+
+
+
 // For each unique letter, you need to shuffle the others to all possible positions.  This way you can ignore repeat letters.
 
 // So start by counting the unique letters.
@@ -36,9 +46,15 @@ function permutationsAbc(string) {
   } while (i < 3);
   
   // remove the duplicate abc
-  arr.pop();
-  console.log(arr);
-  return arr;
+  // arr.pop();
+  // console.log(arr);
+  
+  // filter function iterates over the array and removes duplicates.
+  uniq_arr = arr.filter(function(letter, idx, self) {
+    return idx == self.indexOf(letter);
+  })
+  // console.log(uniq_arr);
+  return uniq_arr;
 }
 
 // PH - WORKING!
