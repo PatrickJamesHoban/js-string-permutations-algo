@@ -8,6 +8,73 @@
   // Get a four letter string to work.
 
 
+// if string.length == 3, return the array of strings
+
+// else, string.length times do ... 
+  // move last letter to first ...
+
+  // then call 'manipulate string' without the first letter
+    // arr.push( arr.each(str) { first letter + str } );
+
+// return the array at the end.
+
+
+function permutations(string) {
+  var final_array = [];
+  if (string.length == 3) {
+    return findLastThree(string);
+  } else {
+    for (let i = 0; i < string.length; i++) {
+      var new_array = [];
+      var new_iteration = moveLastFirst(string);
+      var first_letter = new_iteration.charAt(0);
+      var remaining_string = new_iteration.slice(1);
+      var arr = permutations(remaining_string);
+      arr.forEach(function(word){
+        new_array.push(first_letter + word);
+      });
+      return new_array;
+    }
+  }
+}
+
+// PH - WORKING!
+// Move last letter to first position.
+function moveLastFirst(string) {
+  // console.log(string);
+  var str_minus_last = string.slice(0, -1);
+  // console.log(str_minus_last);
+  var last_letter = string.charAt(string.length-1);
+  // console.log(last_letter);
+  return (last_letter + str_minus_last);
+}
+
+function findLastThree(string) {
+  var arr = [];
+
+  arr.push(string);
+
+  var i = 0;
+  do { 
+    // console.log(arr.slice(-1).pop());
+    var one = flipLastTwo(arr.slice(-1).pop());
+    // console.log(one);
+    arr.push(one);
+    var two = flipBeforeLastTwo(one);
+    // console.log('hi')
+    // console.log(two);
+    arr.push(two);
+    i++; 
+  } while (i < 3);
+
+  console.log(arr);
+  uniq_arr = arr.filter(function(letter, idx, self) {
+    return idx == self.indexOf(letter);
+  })
+  // console.log(uniq_arr);
+  return uniq_arr;
+}
+
 
 // For each unique letter, you need to shuffle the others to all possible positions.  This way you can ignore repeat letters.
 
@@ -20,6 +87,10 @@
 
 // track positions each letter has been?
 
+
+  // instead of string.length, what if i pass it just the portion of the string it needs each time.
+  
+  // it has to be recursive, for each call it has to send a smaller section of string and run it.  Then it can use that smaller string's length still.
 
 
 // ********************************* PATTERN FOR 3 LETTERS *************************************
@@ -307,6 +378,42 @@ permutations('abcde'); //
 // bca => flip 2, 3
 // bac => flip 1, 2 - Back at the Beginning.
 
+
+// ********************************* PATTERN FOR 3 LETTERS RECURSION *************************************
+
+// abc => flip 2, 3
+// acb => flip 1, 3
+// bca => flip 2, 3
+// bac => flip 1, 3
+// cab => flip 2, 3
+// cba => flip 1, 3 - Back at the Beginning.
+
+// AAHAHAHHAHAHAHAHAHA.... WORKS FOR RECURSIVE.
+
+// https://docs.microsoft.com/en-us/scripting/javascript/advanced/recursion-javascript
+
+// ********************************* PATTERN FOR 4 LETTERS RECURSION *************************************
+
+// abcd => flip 3, 4
+// abdc => flip 2, 4
+// acdb => flip 1, 4
+
+// bcda => flip 3, 4
+// bcad => flip 2, 4
+// bdac => flip 1, 4
+
+// cdab => flip 3, 4
+// cdba => flip 2, 4
+// cabd => flip 1, 4
+
+// dabc => flip 3, 4
+// dacb => flip 2, 4
+// dbca => flip 1, 4
+
+// abcd ...
+
+// Won't work quite like this.  Will have to scrape a letter off then call the function again.
+
 // ********************************* FAILED PATTERN FOR 4 LETTERS *************************************
 
 
@@ -490,7 +597,25 @@ permutations('abcde'); //
 
   // EBCDA => FLIP 3, 4 - BACK AT BEGINNING 3
   // EABCD => MOVE LAST TO SECOND - BACK AT BEGINNING 2, NOT AT BEGINNING 1
+
 // DEABC => MOVE LAST TO FIRST, SET AS BEGINNING 2
+
+
+  // instead of string.length, what if i pass it just the portion of the string it needs each time.
+  
+  // it has to be recursive, for each call it has to send a smaller section of string and run it.  Then it can use that smaller string's length still.
+
+
+function recursiveCall(string, piece) {
+  // return when string length is 4
+  // 6 times call this... take 1 letter off
+
+  for (let i = 0; i < string.length; )
+}
+
+  // 5 times call this... take 1 letter off
+
+  // 4 times call this.. return
 
 
 // ******************************** 6 LETTER PATTERN 1ST ATTEMPT ****************************************
