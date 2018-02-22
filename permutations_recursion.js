@@ -5,29 +5,79 @@
 
 
 // CODE 
+
+
+
+// ******************************** FIRST ATTEMPT WORKING FOR UP TO 5 LETTER STRING **********************************
 function permutations(string) {
   var final_array = [];
   if (string.length == 3) {
     return findLastThree(string);
   } else {
     var new_array = [];
-    new_array.push(string);
+    // DON'T STORE THE STRING, USE OR STATEMENT
+    // new_array.push(string);
     console.log('new_array at first is ', new_array);
     for (let i = 0; i < string.length; i++) {
       // var new_array = [];
+      let first_string = "";
+      let first_letter = "";
+      let remaining_string = "";
       
       /// PROBLEM RIGHT HERE TO DO ... 
-      
-      new_array.push(moveLastFirst(new_array.pop()));
+      console.log('length is ', new_array.length);
+      console.log("i is ", i);
+      console.log('new array is ', new_array);
+      console.log(typeof new_array[0])
+      if (typeof new_array[0] === 'undefined') {
+        console.log("SUCCESS!");
+        first_string = moveLastFirst(string);
+        console.log('first string ', first_string);
+        first_letter = first_string.charAt(0);
+        console.log('first letter ', first_letter);
+        remaining_string = first_string.slice(1);
+        console.log('remaining string ', remaining_string);
+      } else {
+        // slice doesn't change original...
+        first_string = moveLastFirst(new_array.slice(-1).pop());
+        
+        first_letter = first_string.charAt(0);
+        
+        remaining_string = first_string.slice(1);
       // moveLastFirst(new_array.pop());
-      
-      
-      
+      // LOSES IT WHEN IT DROPS THE D AND GOES TO EACB, SHOULD BE EABC
+  //     new array after concat is  [ 'eabcd',
+  // 'edabc',
+  // 'edacb',
+  // 'edcab',
+  // 'edcba',
+  // 'edbca',
+  // 'edbac',
+  // 'ecdab',
+  // 'ecdba',
+  // 'ecbda',
+  // 'ecbad',
+  // 'ecabd',
+  // 'ecadb',
+  // 'ebcda',
+  // 'ebcad',
+  // 'ebacd',
+  // 'ebadc',
+  // 'ebdac',
+  // 'ebdca',
+  // 'eabcd',
+  // 'eabdc',
+  // 'eadbc',
+  // 'eadcb',
+  // 'eacdb',
+  // 'eacbd' ]
       // let new_iteration = moveLastFirst(string);
       // console.log("new_array after move last is ", new_array);
-      let first_letter = new_array.slice(-1).pop().charAt(0);
+      // first_letter = new_array.slice(-1).pop().charAt(0);
       // console.log("first letter is ...", first_letter);
-      let remaining_string = new_array.slice(-1).pop().slice(1);
+      // remaining_string = new_array.slice(-1).pop().slice(1);
+      
+      }      
       // console.log("remaining_string ", remaining_string);
       let arr = permutations(remaining_string);
       // console.log('permutations ', arr);
@@ -38,14 +88,17 @@ function permutations(string) {
       //   new_array.push(first_letter + word);
       // });
       console.log("new array after concat is ", new_array);
+
     }
-    console.log("new array is out of for is ", new_array.length);
+  }
+    // console.log("new array is out of for is ", new_array.length);
     uniq_arr = new_array.filter(function(letter, idx, self) {
       return idx == self.indexOf(letter);
     });
-    console.log('uniq_arr ', uniq_arr.length)
+    console.log('uniq_arr final is ', uniq_arr.length)
     return uniq_arr;
-  }
+    // console.log('new_array final is ', new_array.length);
+    // return new_array;
 }
 
 
@@ -59,6 +112,7 @@ function findLastThree(string) {
   var i = 0;
   do { 
     // console.log(flt_arr.slice(-1).pop());
+    // if flt_arr
     var one = flipLastTwo(flt_arr.slice(-1).pop());
     // console.log(one);
     flt_arr.push(one);
@@ -74,7 +128,9 @@ function findLastThree(string) {
   // uniq_arr = flt_arr.filter(function(letter, idx, self) {
   //   return idx == self.indexOf(letter);
   // })
-  // console.log("uniq_arr  ", uniq_arr);
+  
+  // maybe solve by adding start to the end again?
+  console.log("flt_arr  ", flt_arr);
   return flt_arr.slice(1);
 }
 
@@ -125,13 +181,14 @@ function addBackTogether(array, letter) {
   return added_arr;
 }
 
-
 // DRIVER CODE
 // var sample = ['bc', 'cb'];
 // addBackTogether(sample, 'a');
 
 // findLastThree('abc'); // WORKING!
 
-permutations('abcd');  // WORKING! 
+// permutations('abcd');  // WORKING! WORKING WITH IF ELSE!
 
-// permutations('abcde');  // 
+// permutations('abcde');  // WORKING! ALSO WORKS W/ UNIQUE!
+
+permutations('ababc');  // 

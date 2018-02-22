@@ -7,73 +7,10 @@
   // Make sure 3 letter string still works.
   // Get a four letter string to work.
 
+// Priorities:
+  // let's make sure the pattern for 5 works, walk it through
+  // once it works, look at solving without storing the string in the array first, only once it's finished.
 
-// if string.length == 3, return the array of strings
-
-// else, string.length times do ... 
-  // move last letter to first ...
-
-  // then call 'manipulate string' without the first letter
-    // arr.push( arr.each(str) { first letter + str } );
-
-// return the array at the end.
-
-
-function permutations(string) {
-  var final_array = [];
-  if (string.length == 3) {
-    return findLastThree(string);
-  } else {
-    for (let i = 0; i < string.length; i++) {
-      var new_array = [];
-      var new_iteration = moveLastFirst(string);
-      var first_letter = new_iteration.charAt(0);
-      var remaining_string = new_iteration.slice(1);
-      var arr = permutations(remaining_string);
-      arr.forEach(function(word){
-        new_array.push(first_letter + word);
-      });
-      return new_array;
-    }
-  }
-}
-
-// PH - WORKING!
-// Move last letter to first position.
-function moveLastFirst(string) {
-  // console.log(string);
-  var str_minus_last = string.slice(0, -1);
-  // console.log(str_minus_last);
-  var last_letter = string.charAt(string.length-1);
-  // console.log(last_letter);
-  return (last_letter + str_minus_last);
-}
-
-function findLastThree(string) {
-  var arr = [];
-
-  arr.push(string);
-
-  var i = 0;
-  do { 
-    // console.log(arr.slice(-1).pop());
-    var one = flipLastTwo(arr.slice(-1).pop());
-    // console.log(one);
-    arr.push(one);
-    var two = flipBeforeLastTwo(one);
-    // console.log('hi')
-    // console.log(two);
-    arr.push(two);
-    i++; 
-  } while (i < 3);
-
-  console.log(arr);
-  uniq_arr = arr.filter(function(letter, idx, self) {
-    return idx == self.indexOf(letter);
-  })
-  // console.log(uniq_arr);
-  return uniq_arr;
-}
 
 
 // For each unique letter, you need to shuffle the others to all possible positions.  This way you can ignore repeat letters.
@@ -143,9 +80,103 @@ function findLastThree(string) {
 
 // WORKING!!!!
 
+// ******************************  RECURSION IDEA ************************************************************
+
+  // instead of string.length, what if i pass it just the portion of the string it needs each time.
+  
+  // it has to be recursive, for each call it has to send a smaller section of string and run it.  Then it can use that smaller string's length still.
 
 
-// ***********************************  CODE  *****************************************
+// function recursiveCall(string, piece) {
+  // return when string length is 4
+  // 6 times call this... take 1 letter off
+
+//   for (let i = 0; i < string.length; )
+// }
+
+  // 5 times call this... take 1 letter off
+
+  // 4 times call this.. return
+
+// ******************************* PSEUDOCODE RECURSIVE IDEA **********************************************
+
+
+// if string.length == 3, return the array of strings
+
+// else, string.length times do ... 
+  // move last letter to first ...
+
+  // then call 'manipulate string' without the first letter
+    // arr.push( arr.each(str) { first letter + str } );
+
+// return the array at the end.
+
+
+// ***********************************************  CODE  **************************************************
+// *********************************************************************************************************
+
+
+// **************************  FIRST PARTIAL STARTING PASS AT RECURSIVE APPROACH *******************************
+
+
+
+function permutations(string) {
+  var final_array = [];
+  if (string.length == 3) {
+    return findLastThree(string);
+  } else {
+    for (let i = 0; i < string.length; i++) {
+      var new_array = [];
+      var new_iteration = moveLastFirst(string);
+      var first_letter = new_iteration.charAt(0);
+      var remaining_string = new_iteration.slice(1);
+      var arr = permutations(remaining_string);
+      arr.forEach(function(word){
+        new_array.push(first_letter + word);
+      });
+      return new_array;
+    }
+  }
+}
+
+// PH - WORKING!
+// Move last letter to first position.
+function moveLastFirst(string) {
+  // console.log(string);
+  var str_minus_last = string.slice(0, -1);
+  // console.log(str_minus_last);
+  var last_letter = string.charAt(string.length-1);
+  // console.log(last_letter);
+  return (last_letter + str_minus_last);
+}
+
+function findLastThree(string) {
+  var arr = [];
+
+  arr.push(string);
+
+  var i = 0;
+  do { 
+    // console.log(arr.slice(-1).pop());
+    var one = flipLastTwo(arr.slice(-1).pop());
+    // console.log(one);
+    arr.push(one);
+    var two = flipBeforeLastTwo(one);
+    // console.log('hi')
+    // console.log(two);
+    arr.push(two);
+    i++; 
+  } while (i < 3);
+
+  console.log(arr);
+  uniq_arr = arr.filter(function(letter, idx, self) {
+    return idx == self.indexOf(letter);
+  })
+  // console.log(uniq_arr);
+  return uniq_arr;
+}
+
+// *************************** FIRST PASS ITERATIVE APPROACH WORKS UP TO 4 LETTERS ***********************
 function permutations(string) {
   var arr = [];
   // arr.push("hi")
@@ -601,21 +632,42 @@ permutations('abcde'); //
 // DEABC => MOVE LAST TO FIRST, SET AS BEGINNING 2
 
 
-  // instead of string.length, what if i pass it just the portion of the string it needs each time.
+// ******************************* 5 LETTER PATTERN THE WAY CODE IS DESIGNED ****************************
+
+
+// [] => CREATE ARRAY.
+
+// [] => ABCDE => TAKE STRING FROM ARRAY... OR... IF ARRAY IS EMPTY USE STRING, MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
+
+// EABCD => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM
+
+  // [] => CREATE ARRAY.
+
+  // [] => ABCD => TAKE LAST STRING FROM ARRAY... OR... IF ARRAY IS EMPTY USE STRING, MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
+
+  // DABC => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM
+
+    // ABC => CREATE ARRAY OF COMBINATIONS 
+    // ACB => FLIP 2, 3, ADD TO ARRAY
+    // CAB => FLIP 1, 2, ADD TO ARRAY
+    // CBA => FLIP 2, 3, ADD TO ARRAY
+    // BCA => FLIP 1, 2, ADD TO ARRAY
+    // BAC => FLIP 2, 3, ADD TO ARRAY
+    // ABC => FLIP 1, 2, ADD TO ARRAY
+    // [ ACB, CAB, CBA, BCA, BAC, ABC ] => RETURN ARRAY AND JOIN EACH LETTER
+  // [ DACB, DCAB, DCBA, DBCA, DBAC, DABC ] => RETURN ARRAY OF JOINED LETTERS, ADD TO ARRAY AND START LOOP 2/4.
+
+  // ARRAY NOT EMPTY. USE LAST ITEM IN ARRAY.  MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
+  // CDAB => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM.
   
-  // it has to be recursive, for each call it has to send a smaller section of string and run it.  Then it can use that smaller string's length still.
+    // ABC => CREATE ARRAY OF COMBINATIONS 
+    // ACB => FLIP 2, 3, ADD TO ARRAY
+    // CAB => FLIP 1, 2, ADD TO ARRAY
+    // CBA => FLIP 2, 3, ADD TO ARRAY
+    // BCA => FLIP 1, 2, ADD TO ARRAY
+    // BAC => FLIP 2, 3, ADD TO ARRAY
+    // ABC => FLIP 1, 2, ADD TO ARRAY
 
-
-function recursiveCall(string, piece) {
-  // return when string length is 4
-  // 6 times call this... take 1 letter off
-
-  for (let i = 0; i < string.length; )
-}
-
-  // 5 times call this... take 1 letter off
-
-  // 4 times call this.. return
 
 
 // ******************************** 6 LETTER PATTERN 1ST ATTEMPT ****************************************
