@@ -30,7 +30,7 @@
   // it has to be recursive, for each call it has to send a smaller section of string and run it.  Then it can use that smaller string's length still.
 
 
-// ********************************* PATTERN FOR 3 LETTERS *************************************
+// ********************************* PATTERN FOR STRING LENGTH 3 *************************************
 
 // abc => flip 2, 3
 // acb => flip 1, 2
@@ -40,7 +40,7 @@
 // bac => flip 1, 2 - Back at the Beginning.
 
 
-// ******************************* 4TH PATTERN ATTEMPT FOR 4 LETTERS - WORKS!!! ***************************************
+// ******************************* PATTERN FOR STRING LENGTH 4 ***************************************
 
 // SET DEFG AS THE BEGINNING FOR REFERENCE.  I KNOW I HAVE 4 DIFFERENT LETTERS THAT NEED TO MOVE TO THE FIRST POSITION SO I HAVE 4 DIFFERENT MOVE FIRST TO LAST THAT I NEED TO MAKE.
 
@@ -80,101 +80,89 @@
 
 // WORKING!!!!
 
-// ******************************  RECURSION IDEA ************************************************************
 
-  // instead of string.length, what if i pass it just the portion of the string it needs each time.
-  
-  // it has to be recursive, for each call it has to send a smaller section of string and run it.  Then it can use that smaller string's length still.
+// ****************************** PATTERN FOR STRING LENGTH 5 *********************************************
+
+// ABCDE => SET AS BEGINNING 1
+
+// EABCD => MOVE LAST TO FIRST, SET AS BEGINNING 2
+// EABDC => FLIP 4, 5
+// EADBC => FLIP 3, 4
+// EADCB => FLIP 4, 5
+// EACDB => FLIP 3, 4
+// EACBD => FLIP 4, 5
+
+  // EABCD => FLIP 3, 4 - BACK AT BEGINNING
+// EDABC => FLIP 3, 4 - BACK AT BEGINNING, MOVE LAST TO SECOND, SET AS NEW BEGINNING 3
+// EDACB => FLIP 4, 5
+// EDCAB => FLIP 3, 4
+// EDCBA => FLIP 4, 5
+// EDBCA => FLIP 3, 4
+// EDBAC => FLIP 4, 5
+
+  // EDABC => FLIP 3, 4 - BACK AT BEGINNING
+// ECDAB => FLIP 3, 4 - BACK AT BEGINNING, MOVE LAST TO SECOND, SET AS NEW BEGINNING 3
+// ECDBA => FLIP 4, 5
+// ECBDA => FLIP 3, 4
+// ECBAD => FLIP 4, 5
+// ECABD => FLIP 3, 4
+// ECADB => FLIP 4, 5
+
+  // ECDAB => FLIP 3, 4 - BACK AT BEGINNING
+// EBCDA => FLIP 3, 4 - BACK AT BEGINNING, MOVE LAST TO SECOND, SET AS NEW BEGINNING 3
+// EBCAD => FLIP 4, 5
+// EBACD => FLIP 3, 4
+// EBADC => FLIP 4, 5
+// EBDAC => FLIP 3, 4
+// EBDCA => FLIP 4, 5
+
+  // EBCDA => FLIP 3, 4 - BACK AT BEGINNING 3
+  // EABCD => MOVE LAST TO SECOND - BACK AT BEGINNING 2, NOT AT BEGINNING 1
+
+// DEABC => MOVE LAST TO FIRST, SET AS BEGINNING 2
 
 
-// function recursiveCall(string, piece) {
-  // return when string length is 4
-  // 6 times call this... take 1 letter off
-
-//   for (let i = 0; i < string.length; )
-// }
-
-  // 5 times call this... take 1 letter off
-
-  // 4 times call this.. return
-
-// ******************************* PSEUDOCODE RECURSIVE IDEA **********************************************
+// ******************************* 5 LETTER PATTERN THE WAY CODE IS DESIGNED ****************************
 
 
-// if string.length == 3, return the array of strings
+// [] => CREATE ARRAY.
 
-// else, string.length times do ... 
-  // move last letter to first ...
+// [] => ABCDE => TAKE STRING FROM ARRAY... OR... IF ARRAY IS EMPTY USE STRING, MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
 
-  // then call 'manipulate string' without the first letter
-    // arr.push( arr.each(str) { first letter + str } );
+// EABCD => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM
 
-// return the array at the end.
+  // [] => CREATE ARRAY.
+
+  // [] => ABCD => TAKE LAST STRING FROM ARRAY... OR... IF ARRAY IS EMPTY USE STRING, MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
+
+  // DABC => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM
+
+    // ABC => CREATE ARRAY OF COMBINATIONS 
+    // ACB => FLIP 2, 3, ADD TO ARRAY
+    // CAB => FLIP 1, 2, ADD TO ARRAY
+    // CBA => FLIP 2, 3, ADD TO ARRAY
+    // BCA => FLIP 1, 2, ADD TO ARRAY
+    // BAC => FLIP 2, 3, ADD TO ARRAY
+    // ABC => FLIP 1, 2, ADD TO ARRAY
+    // [ ACB, CAB, CBA, BCA, BAC, ABC ] => RETURN ARRAY AND JOIN EACH LETTER
+  // [ DACB, DCAB, DCBA, DBCA, DBAC, DABC ] => RETURN ARRAY OF JOINED LETTERS, ADD TO ARRAY AND START LOOP 2/4.
+
+  // ARRAY NOT EMPTY. USE LAST ITEM IN ARRAY.  MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
+  // CDAB => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM.
+
+    // ABC => CREATE ARRAY OF COMBINATIONS 
+    // ACB => FLIP 2, 3, ADD TO ARRAY
+    // CAB => FLIP 1, 2, ADD TO ARRAY
+    // CBA => FLIP 2, 3, ADD TO ARRAY
+    // BCA => FLIP 1, 2, ADD TO ARRAY
+    // BAC => FLIP 2, 3, ADD TO ARRAY
+    // ABC => FLIP 1, 2, ADD TO ARRAY
+
 
 
 // ***********************************************  CODE  **************************************************
 // *********************************************************************************************************
 
-
-// **************************  FIRST PARTIAL STARTING PASS AT RECURSIVE APPROACH *******************************
-
-
-
-function permutations(string) {
-  var final_array = [];
-  if (string.length == 3) {
-    return findLastThree(string);
-  } else {
-    for (let i = 0; i < string.length; i++) {
-      var new_array = [];
-      var new_iteration = moveLastFirst(string);
-      var first_letter = new_iteration.charAt(0);
-      var remaining_string = new_iteration.slice(1);
-      var arr = permutations(remaining_string);
-      arr.forEach(function(word){
-        new_array.push(first_letter + word);
-      });
-      return new_array;
-    }
-  }
-}
-
-// PH - WORKING!
-// Move last letter to first position.
-function moveLastFirst(string) {
-  // console.log(string);
-  var str_minus_last = string.slice(0, -1);
-  // console.log(str_minus_last);
-  var last_letter = string.charAt(string.length-1);
-  // console.log(last_letter);
-  return (last_letter + str_minus_last);
-}
-
-function findLastThree(string) {
-  var arr = [];
-
-  arr.push(string);
-
-  var i = 0;
-  do { 
-    // console.log(arr.slice(-1).pop());
-    var one = flipLastTwo(arr.slice(-1).pop());
-    // console.log(one);
-    arr.push(one);
-    var two = flipBeforeLastTwo(one);
-    // console.log('hi')
-    // console.log(two);
-    arr.push(two);
-    i++; 
-  } while (i < 3);
-
-  console.log(arr);
-  uniq_arr = arr.filter(function(letter, idx, self) {
-    return idx == self.indexOf(letter);
-  })
-  // console.log(uniq_arr);
-  return uniq_arr;
-}
 
 // *************************** FIRST PASS ITERATIVE APPROACH WORKS UP TO 4 LETTERS ***********************
 function permutations(string) {
@@ -326,7 +314,8 @@ permutations('abcde'); //
 
 
 
-// PSEUDO CODE 
+// **********************************  SO MUCH MORE PSEUDO CODE ***********************************************
+// **********************************  THAT DIDN'T WORK SO WELL ***********************************************
 
   // Set j as string.length - i factorial. This would be the permutations needed to move to the next step. j = 1.
 
@@ -409,6 +398,16 @@ permutations('abcde'); //
 // bca => flip 2, 3
 // bac => flip 1, 2 - Back at the Beginning.
 
+// ********************************* PATTERN FOR STRING LENGTH 2 RECURSION *******************************
+
+// ABC => 
+// CAB => 
+  // AB => 
+  // [ AB, BA ]
+// [ CAB, CBA ]
+
+// CBA => 
+// ABC => 
 
 // ********************************* PATTERN FOR 3 LETTERS RECURSION *************************************
 
@@ -419,7 +418,7 @@ permutations('abcde'); //
 // cab => flip 2, 3
 // cba => flip 1, 3 - Back at the Beginning.
 
-// AAHAHAHHAHAHAHAHAHA.... WORKS FOR RECURSIVE.
+// WORKS FOR RECURSIVE.  DOES NOT WORK WHEN USED IN COMBINATION WITH 4TH LETTER APPROACH.
 
 // https://docs.microsoft.com/en-us/scripting/javascript/advanced/recursion-javascript
 
@@ -591,83 +590,6 @@ permutations('abcde'); //
 
 
 
-// ****************************** 5 LETTER PATTERN 2ND ATTEMPT *********************************************
-
-// ABCDE => SET AS BEGINNING 1
-
-// EABCD => MOVE LAST TO FIRST, SET AS BEGINNING 2
-// EABDC => FLIP 4, 5
-// EADBC => FLIP 3, 4
-// EADCB => FLIP 4, 5
-// EACDB => FLIP 3, 4
-// EACBD => FLIP 4, 5
-
-  // EABCD => FLIP 3, 4 - BACK AT BEGINNING
-// EDABC => FLIP 3, 4 - BACK AT BEGINNING, MOVE LAST TO SECOND, SET AS NEW BEGINNING 3
-// EDACB => FLIP 4, 5
-// EDCAB => FLIP 3, 4
-// EDCBA => FLIP 4, 5
-// EDBCA => FLIP 3, 4
-// EDBAC => FLIP 4, 5
-
-  // EDABC => FLIP 3, 4 - BACK AT BEGINNING
-// ECDAB => FLIP 3, 4 - BACK AT BEGINNING, MOVE LAST TO SECOND, SET AS NEW BEGINNING 3
-// ECDBA => FLIP 4, 5
-// ECBDA => FLIP 3, 4
-// ECBAD => FLIP 4, 5
-// ECABD => FLIP 3, 4
-// ECADB => FLIP 4, 5
-
-  // ECDAB => FLIP 3, 4 - BACK AT BEGINNING
-// EBCDA => FLIP 3, 4 - BACK AT BEGINNING, MOVE LAST TO SECOND, SET AS NEW BEGINNING 3
-// EBCAD => FLIP 4, 5
-// EBACD => FLIP 3, 4
-// EBADC => FLIP 4, 5
-// EBDAC => FLIP 3, 4
-// EBDCA => FLIP 4, 5
-
-  // EBCDA => FLIP 3, 4 - BACK AT BEGINNING 3
-  // EABCD => MOVE LAST TO SECOND - BACK AT BEGINNING 2, NOT AT BEGINNING 1
-
-// DEABC => MOVE LAST TO FIRST, SET AS BEGINNING 2
-
-
-// ******************************* 5 LETTER PATTERN THE WAY CODE IS DESIGNED ****************************
-
-
-// [] => CREATE ARRAY.
-
-// [] => ABCDE => TAKE STRING FROM ARRAY... OR... IF ARRAY IS EMPTY USE STRING, MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
-
-// EABCD => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM
-
-  // [] => CREATE ARRAY.
-
-  // [] => ABCD => TAKE LAST STRING FROM ARRAY... OR... IF ARRAY IS EMPTY USE STRING, MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
-
-  // DABC => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM
-
-    // ABC => CREATE ARRAY OF COMBINATIONS 
-    // ACB => FLIP 2, 3, ADD TO ARRAY
-    // CAB => FLIP 1, 2, ADD TO ARRAY
-    // CBA => FLIP 2, 3, ADD TO ARRAY
-    // BCA => FLIP 1, 2, ADD TO ARRAY
-    // BAC => FLIP 2, 3, ADD TO ARRAY
-    // ABC => FLIP 1, 2, ADD TO ARRAY
-    // [ ACB, CAB, CBA, BCA, BAC, ABC ] => RETURN ARRAY AND JOIN EACH LETTER
-  // [ DACB, DCAB, DCBA, DBCA, DBAC, DABC ] => RETURN ARRAY OF JOINED LETTERS, ADD TO ARRAY AND START LOOP 2/4.
-
-  // ARRAY NOT EMPTY. USE LAST ITEM IN ARRAY.  MOVE LAST TO FIRST, SEND TO NEXT COMMAND.  DO NOT MANIPULATE ORIGINAL ARRAY.
-  // CDAB => DROP FIRST LETTER, RECURSIVE CALL TO ALGORITHM.
-  
-    // ABC => CREATE ARRAY OF COMBINATIONS 
-    // ACB => FLIP 2, 3, ADD TO ARRAY
-    // CAB => FLIP 1, 2, ADD TO ARRAY
-    // CBA => FLIP 2, 3, ADD TO ARRAY
-    // BCA => FLIP 1, 2, ADD TO ARRAY
-    // BAC => FLIP 2, 3, ADD TO ARRAY
-    // ABC => FLIP 1, 2, ADD TO ARRAY
-
 
 
 // ******************************** 6 LETTER PATTERN 1ST ATTEMPT ****************************************
@@ -696,68 +618,3 @@ permutations('abcde'); //
 
   // FAEC
 
-
-// ******************************** START DETERMINING PATTERN FOR 5 LETTERS *********************************
-
-// abcde => sorted, first [0]
-// abced => flip 4, 5
-// abecd => flip 3, 4
-// abedc => flip 4, 5
-// abdec => flip 3, 4
-// abdce => flip 4, 5
-
-// 
-
-
-// how do I know how many times I have to repeat for each flip?
-
-// gdef => Move the last letter to the first and run it.
-// 
-// degf => flip 2 & 3,
-// defg => flip 3 & 4, 
-// gfde => flip 3 & 4
-// g => flip 2 & 3
-
-// edfg == flip 3 & 4, now equals or back to where we started...
-// take last from array and... reverse it?
-
-// gfde =>
-// fgde => flip 1 & 2
-// fdge => flip 2 & 3,
-// fdeg => flip 3 & 4
-// fedg => flip 2 & 3, 
-// fegd => flip 3 & 4,
-// fged => flip 2 & 3
-
-// 
-
-// degf => flip 1 & 2,
-// dgef => flip 2 & 3,
-// dgfe => flip 3 & 4,
-// degf => flip 2 & 3, 
-// 
-
-
-
-
-// fegd => flip 4 & 5, have a new first letter
-// fged => flip 5 & 6
-// fgde => flip 6 & 7
-
-// gfde => flip 4 & 5
-// gdfe => flip 5 & 6
-// gdef => flip 6 & 7
-
-// dgef => flip 4 & 5
-// degf => flip 5 & 6
-// defg == flip 6 & 7, 
-
-
-
-// last 4 letters will have 4! possibilities = 4*3*2*1 = 24
-
-
-
-// hhimmpp
-// hhimpmp
-// hhi
